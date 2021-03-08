@@ -134,6 +134,15 @@ X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=
 # Import and fit a Support Vector Machine
 from sklearn import svm
 clf = svm.SVC()
+# In problems where it is desired to give more importance
+# to certain classes or certain individual samples, 
+# the parameters class_weight and sample_weight can be used.
+
+# parameter class_weight goes in the fit method. 
+# It’s a dictionary of the form {class_label : value}
+# where value is a floating point number > 0 
+# that sets the parameter C of class class_label to 
+# C * value.
 clf.fit(X_train, y_train)
 
 # TODO train 2 more types of model - naive bayes and logistic regression?
