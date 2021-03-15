@@ -1,36 +1,36 @@
 #### IMPORTS ####
 import pandas as pd # for data manipulation and .describe()
 
-#### READ IN DATA ####
-cov = pd.read_csv("datasets/latestdata.csv") # original (can be switched out for smaller or outcome to run quicker)
+# #### READ IN DATA ####
+# cov = pd.read_csv("datasets/latestdata.csv") # original (can be switched out for smaller or outcome to run quicker)
 
-# Inspect data
-# print(cov.count()) # print(cov["sex"].describe() # also good
+# # Inspect data
+# # print(cov.count()) # print(cov["sex"].describe() # also good
 
-#### SELECT ONLY THE RELEVANT COLUMNS ####
-# Interesting problems which don't have quite enough data
-# fields = ["age", "sex", "outcome", "date_admission_hospital", "date_onset_symptoms", "country"] # 228 rows
-# fields = ["outcome", "date_admission_hospital", "date_onset_symptoms"] # 234 rows
-# fields = ["outcome", "date_admission_hospital", "date_confirmation"] # 262 rows
-# fields = ["outcome", "date_confirmation", "date_onset_symptoms"] # 3505 rows
+# #### SELECT ONLY THE RELEVANT COLUMNS ####
+# # Interesting problems which don't have quite enough data
+# # fields = ["age", "sex", "outcome", "date_admission_hospital", "date_onset_symptoms", "country"] # 228 rows
+# # fields = ["outcome", "date_admission_hospital", "date_onset_symptoms"] # 234 rows
+# # fields = ["outcome", "date_admission_hospital", "date_confirmation"] # 262 rows
+# # fields = ["outcome", "date_confirmation", "date_onset_symptoms"] # 3505 rows
 
-# Identify the columns required for the problem
-fields = ["outcome", "age", "sex", "date_confirmation", "date_onset_symptoms", "country"] # 3493 rows - mostly from the phillipines
-# Without the dates - worth having a look into
-# fields = ["outcome", "country", "age", "sex"] # 33599 rows
+# # Identify the columns required for the problem
+# fields = ["outcome", "age", "sex", "date_confirmation", "date_onset_symptoms", "country"] # 3493 rows - mostly from the phillipines
+# # Without the dates - worth having a look into
+# # fields = ["outcome", "country", "age", "sex"] # 33599 rows
 
-# Select these columns from the dataset
-dataset = cov[fields]
+# # Select these columns from the dataset
+# dataset = cov[fields]
 
 
-#### DATA CLEANING ####
+# #### DATA CLEANING ####
  
-# Drop the rows which are missing information
-dataset = dataset.dropna(subset=fields)
+# # Drop the rows which are missing information
+# dataset = dataset.dropna(subset=fields)
 
-# Store the set for future use
-dataset.to_csv("datasets/dataset1.csv")
-# Load the dataset if not doing the earlier steps
+# # Store the set for future use
+# dataset.to_csv("datasets/dataset1.csv")
+# # Load the dataset if not doing the earlier steps
 dataset = pd.read_csv('datasets/dataset1.csv')
 
 
@@ -77,10 +77,11 @@ for i in range(len(dataset['date_confirmation'])):
 
 dataset['days_waiting'] = gaps
 dataset = dataset.drop(columns=['date_confirmation', 'date_onset_symptoms'])
+dataset['days_waiting'] = dataset['days_waiting'].dt.days
+dataset = dataset[dataset['days_waiting'] >= 0]
 
 # Save the cleaned up dataset for future use
 dataset.to_csv('datasets/dataset1_clean.csv')
-
 
 #### DATA PREPARATION ####
 # Split the data into features and labels
@@ -92,7 +93,7 @@ features = features.replace(to_replace={'sex': {
     'male':0,
     'female':1
 }})
-features['days_waiting'] = features['days_waiting'].dt.days
+
 
 # Use one hot encoding for the age and the country # TODO IS THERE A BETTER WAY OF ENCODING THESE?
 countries_df = pd.get_dummies(features['country'])
@@ -130,10 +131,11 @@ def person_encode(days_waiting, sex, country, age):
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.1, random_state=0)
 
+print(y_test.value_counts())
 
 # Import and fit a Support Vector Machine
 from sklearn import svm
-svm_classifier = svm.SVC()
+svm_classifier = svm.SVC(gamma='auto')
 # In problems where it is desired to give more importance
 # to certain classes or certain individual samples, 
 # the parameters class_weight and sample_weight can be used.
@@ -146,7 +148,7 @@ svm_classifier.fit(X_train, y_train)
 
 # Immport and fit a logistic regression model
 from sklearn import linear_model
-LR_classifier = linear_model.LogisticRegression(solver='lbfgs', multi_class='multinomial')
+LR_classifier = linear_model.LogisticRegression(solver='lbfgs', multi_class='multinomial', max_iter=1000)
 # There are five solvers that can be used to obtain the weights
 LR_classifier.fit(X_train, y_train)
 
@@ -156,20 +158,27 @@ tree_classifier = tree.DecisionTreeClassifier()
 tree_classifier.fit(X_train, y_train)
 
 # Import and fit a naive bayes model
-from sklearn.naive_bayes import GaussianNB
-nb_classifier = GaussianNB()
+from sklearn.naive_bayes import MultinomialNB
+nb_classifier = MultinomialNB()
 nb_classifier.fit(X_train, y_train)
+
+# import and fit an XGboost model
+import xgboost as xgb
+xgb_classifier = xgb.XGBClassifier(use_label_encoder=False)
+xgb_classifier.fit(X_train, y_train)
 
 #### MODEL EVALUATION ####
 svm_predictions = svm_classifier.predict(X_test)
 LR_predictions = LR_classifier.predict(X_test)
 tree_predictions = tree_classifier.predict(X_test)
 nb_predictions = nb_classifier.predict(X_test)
+xgb_predictions = xgb_classifier.predict(X_test)
 
 from sklearn import metrics
 svm_accuracy = metrics.accuracy_score(y_test, svm_predictions)
 LR_accuracy = metrics.accuracy_score(y_test, LR_predictions)
 tree_accuracy = metrics.accuracy_score(y_test, tree_predictions)
 nb_accuracy = metrics.accuracy_score(y_test, nb_predictions)
+xgb_accuracy = metrics.accuracy_score(y_test, xgb_predictions)
 
-print(f'SVM score: {svm_accuracy}\nLR score: {LR_accuracy}\nTree score: {tree_accuracy}\nNaive Bayes score: {nb_accuracy}')
+print(f'SVM score: {svm_accuracy}\nLR score: {LR_accuracy}\nTree score: {tree_accuracy}\nNaive Bayes score: {nb_accuracy}\nXGB score: {xgb_accuracy}')
