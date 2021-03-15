@@ -133,20 +133,43 @@ X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=
 
 # Import and fit a Support Vector Machine
 from sklearn import svm
-clf = svm.SVC()
+svm_classifier = svm.SVC()
 # In problems where it is desired to give more importance
 # to certain classes or certain individual samples, 
 # the parameters class_weight and sample_weight can be used.
-
 # parameter class_weight goes in the fit method. 
 # It’s a dictionary of the form {class_label : value}
 # where value is a floating point number > 0 
 # that sets the parameter C of class class_label to 
 # C * value.
-clf.fit(X_train, y_train)
+svm_classifier.fit(X_train, y_train)
 
-# TODO train 2 more types of model - naive bayes and logistic regression?
+# Immport and fit a logistic regression model
+from sklearn import linear_model
+LR_classifier = linear_model.LogisticRegression(solver='lbfgs', multi_class='multinomial')
+# There are five solvers that can be used to obtain the weights
+LR_classifier.fit(X_train, y_train)
 
-#### MODEL EVALUATION
-print(clf.predict([ person_encode(22, 1, 'Japan', '80-89') ]))
+# Import and fit a decision tree
+from sklearn import tree
+tree_classifier = tree.DecisionTreeClassifier()
+tree_classifier.fit(X_train, y_train)
 
+# Import and fit a naive bayes model
+from sklearn.naive_bayes import GaussianNB
+nb_classifier = GaussianNB()
+nb_classifier.fit(X_train, y_train)
+
+#### MODEL EVALUATION ####
+svm_predictions = svm_classifier.predict(X_test)
+LR_predictions = LR_classifier.predict(X_test)
+tree_predictions = tree_classifier.predict(X_test)
+nb_predictions = nb_classifier.predict(X_test)
+
+from sklearn import metrics
+svm_accuracy = metrics.accuracy_score(y_test, svm_predictions)
+LR_accuracy = metrics.accuracy_score(y_test, LR_predictions)
+tree_accuracy = metrics.accuracy_score(y_test, tree_predictions)
+nb_accuracy = metrics.accuracy_score(y_test, nb_predictions)
+
+print(f'SVM score: {svm_accuracy}\nLR score: {LR_accuracy}\nTree score: {tree_accuracy}\nNaive Bayes score: {nb_accuracy}')
