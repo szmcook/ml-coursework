@@ -131,7 +131,7 @@ def person_encode(days_waiting, sex, country, age):
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.1, random_state=0)
 
-print(y_test.value_counts())
+# print(labels.value_counts())
 
 # Import and fit a Support Vector Machine
 from sklearn import svm
@@ -167,6 +167,7 @@ import xgboost as xgb
 xgb_classifier = xgb.XGBClassifier(use_label_encoder=False)
 xgb_classifier.fit(X_train, y_train)
 
+
 #### MODEL EVALUATION ####
 svm_predictions = svm_classifier.predict(X_test)
 LR_predictions = LR_classifier.predict(X_test)
@@ -178,7 +179,18 @@ from sklearn import metrics
 svm_accuracy = metrics.accuracy_score(y_test, svm_predictions)
 LR_accuracy = metrics.accuracy_score(y_test, LR_predictions)
 tree_accuracy = metrics.accuracy_score(y_test, tree_predictions)
+# random forest
 nb_accuracy = metrics.accuracy_score(y_test, nb_predictions)
 xgb_accuracy = metrics.accuracy_score(y_test, xgb_predictions)
 
 print(f'SVM score: {svm_accuracy}\nLR score: {LR_accuracy}\nTree score: {tree_accuracy}\nNaive Bayes score: {nb_accuracy}\nXGB score: {xgb_accuracy}')
+
+print(f'Classification report for svm (remember 0:died, 1:hospitalised, 2:recovered (0.805)): \n{metrics.classification_report(y_test, svm_predictions)}')
+# These scores are all around the 80% mark.
+# I'd like to know what the true and false positive rates are (precision = % of Positives that are correct and recall = % of negatives that are found)
+# I think it'll be necessary to adjust the sampling or reweight the inputs
+# get rid of hospitalised - they probably recovered
+# reweight the died class: for every entry repeat 4 times
+# make a few plots such as age/country and days waiting
+# Should I be doing k-fold validation? Do I have enough data for that?
+# There are also several model parameters that could be tuned
