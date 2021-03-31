@@ -32,22 +32,23 @@ import pandas as pd # for data manipulation and .describe()
 # dataset.to_csv("datasets/dataset1.csv")
 # # Load the dataset if not doing the earlier steps
 dataset = pd.read_csv('datasets/dataset1.csv')
-
+# Drop the unnamed column
+dataset = dataset.drop(columns=['Unnamed: 0'])
 
 # The outcome column contains a lot of different variations on three values.
 dataset = dataset.replace(to_replace={'outcome': {
-    'death':'died',
-    'Deceased':'died',
-    'dead':'died',
-    'stable':'hospitalized',
-    'treated in an intensive care unit (14.02.2020)':'hospitalized', # drop
-    'Symptoms only improved with cough. Currently hospitalized for follow-up.':'hospitalized', # drop
-    'severe':'hospitalized',        # drop these
-    'Hospitalized':'hospitalized',
-    'discharge':'recovered',
-    'discharged':'recovered',
-    'Discharged':'recovered',
-    'Alive':'recovered',
+    'death':0,
+    'Deceased':0,
+    'dead':0,
+    'stable':1,
+    'treated in an intensive care unit (14.02.2020)':1, # drop
+    'Symptoms only improved with cough. Currently hospitalized for follow-up.':1, # drop
+    'severe':0,        # drop these
+    'Hospitalized':0,
+    'discharge':1,
+    'discharged':1,
+    'Discharged':1,
+    'Alive':1,
     }})
 
 # The ages are a mixture of numbers and ranges so we tidy these too
@@ -64,8 +65,6 @@ dataset = dataset.replace(to_replace={'age': {
     '9[0-9][.-]*[0-9]{0,2}':'90-99',
     }}, regex=True)
 
-# Drop the unnamed column
-dataset = dataset.drop(columns=['Unnamed: 0'])
 
 # Calculate the time that patients were waiting and store this in a new column (replacing the previous dates)
 gaps = []
@@ -100,13 +99,6 @@ countries_df = pd.get_dummies(features['country'])
 age_df = pd.get_dummies(features['age'])
 features = pd.concat([features, countries_df, age_df], axis=1)
 features = features.drop(columns=['country', 'age'])
-
-# Encode the labels with integers
-labels = labels.replace({
-    'died':0,
-    'hospitalized':1,
-    'recovered':2
-})
 
 
 def person_encode(days_waiting, sex, country, age):
