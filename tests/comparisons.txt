@@ -1,0 +1,63 @@
+L for local, C for colab
+
+LR
+
+randomised:
+L Best score: 0.7318327974276527 using {'C': 100, 'class_weight': {0: 4.538461538461538, 1: 1}, 'max_iter': 500, 'solver': 'liblinear'}
+L Best score: 0.7318327974276527 using {'solver': 'liblinear', 'max_iter': 1000, 'class_weight': {0: 4.538461538461538, 1: 1}, 'C': 1}
+L Best score: 0.7318327974276527 using {'solver': 'liblinear', 'max_iter': 1000, 'class_weight': {0: 4.538461538461538, 1: 1}, 'C': 100}
+C Best score: 0.7318327974276527 using {'solver': 'lbfgs', 'max_iter': 1000, 'class_weight': {0: 4.538461538461538, 1: 1}, 'C': 100}
+C Best score: 0.7321543408360129 using {'solver': 'liblinear', 'max_iter': 1000, 'class_weight': {0: 4.538461538461538, 1: 1}, 'C': 1}
+
+
+Grid
+C Best score: 0.7321543408360129 using {'C': 1, 'class_weight': {0: 4.538461538461538, 1: 1}, 'max_iter': 500, 'solver': 'liblinear'}
+L Best score: 0.7318327974276527 using {'C': 100, 'class_weight': {0: 4.538461538461538, 1: 1}, 'max_iter': 500, 'solver': 'liblinear'}
+L Best score: 0.7318327974276527 using {'C': 100, 'class_weight': {0: 4.538461538461538, 1: 1}, 'max_iter': 500, 'solver': 'liblinear'}
+
+
+
+
+Random is just as good at getting the right answer, Colab appears to get higher results than local.
+
+RF
+
+randomised:
+C Best score: 0.7813504823151125 using {'n_estimators': 10, 'max_features': 'sqrt', 'max_depth': None, 'criterion': 'entropy', 'class_weight': {0: 4.538461538461538, 1: 1}}
+L Best score: 0.7836012861736334 using {'n_estimators': 50, 'max_features': 'auto', 'max_depth': 100, 'criterion': 'gini', 'class_weight': {0: 4.538461538461538, 1: 1}}
+
+Grid:
+C Best score: 0.7858520900321544 using {'class_weight': {0: 4.538461538461538, 1: 1}, 'criterion': 'gini', 'max_depth': None, 'max_features': 'auto', 'n_estimators': 50}
+L Best score: 0.7852090032154341 using {'class_weight': {0: 4.538461538461538, 1: 1}, 'criterion': 'gini', 'max_depth': None, 'max_features': 'auto', 'n_estimators': 100}
+L Best score: 0.7855305466237942 using {'class_weight': {0: 4.538461538461538, 1: 1}, 'criterion': 'gini', 'max_depth': 100, 'max_features': 'auto', 'n_estimators': 50}
+C Best score: 0.7839228295819936 using {'class_weight': {0: 4.538461538461538, 1: 1}, 'criterion': 'gini', 'max_depth': 100, 'max_features': 'sqrt', 'n_estimators': 50}
+L Best score: 0.7845659163987139 using {'class_weight': {0: 4.538461538461538, 1: 1}, 'criterion': 'gini', 'max_depth': None, 'max_features': 'log2', 'n_estimators': 50}
+C Best score: 0.7855305466237943 using {'class_weight': {0: 4.538461538461538, 1: 1}, 'criterion': 'entropy', 'max_depth': None, 'max_features': 'auto', 'n_estimators': 50}
+L Best score: 0.7871382636655948 using {'class_weight': {0: 4.538461538461538, 1: 1}, 'criterion': 'gini', 'max_depth': 100, 'max_features': 'auto', 'n_estimators': 50}
+C Best score: 0.7852090032154341 using {'class_weight': {0: 4.538461538461538, 1: 1}, 'criterion': 'entropy', 'max_depth': 100, 'max_features': 'auto', 'n_estimators': 50}
+L Best score: 0.7855305466237942 using {'class_weight': {0: 4.538461538461538, 1: 1}, 'criterion': 'gini', 'max_depth': 100, 'max_features': 'log2', 'n_estimators': 100}
+C Best score: 0.7861736334405144 using {'class_weight': {0: 4.538461538461538, 1: 1}, 'criterion': 'entropy', 'max_depth': 100, 'max_features': 'auto', 'n_estimators': 10}
+
+XGB
+
+randomised:
+C Best score: 0.8202572347266882 using {'verbosity': 0, 'subsample': 0.8, 'reg_alpha': 0, 'min_child_weight': 0, 'max_depth': 4, 'label_encoder': False, 'gamma': 0.4, 'class_weight': {0: 4.538461538461538, 1: 1}}
+C Best score: 0.8257234726688104 using {'verbosity': 0, 'subsample': 0.9, 'reg_alpha': 1e-05, 'min_child_weight': 0, 'max_depth': 3, 'label_encoder': False, 'gamma': 0.2, 'class_weight': {0: 4.538461538461538, 1: 1}}
+C Best score: 0.8209003215434084 using {'verbosity': 0, 'subsample': 0.8, 'reg_alpha': 1e-05, 'min_child_weight': 1, 'max_depth': 4, 'label_encoder': False, 'gamma': 0.4, 'class_weight': {0: 4.538461538461538, 1: 1}}
+C Best score: 0.8311897106109324 using {'verbosity': 0, 'subsample': 1.0, 'reg_alpha': 100, 'min_child_weight': 0, 'max_depth': 8, 'label_encoder': False, 'gamma': 0.1, 'class_weight': {0: 4.538461538461538, 1: 1}}
+C Best score: 0.8279742765273312 using {'verbosity': 0, 'subsample': 0.6, 'reg_alpha': 100, 'min_child_weight': 3, 'max_depth': 8, 'label_encoder': False, 'gamma': 0.3, 'class_weight': {0: 4.538461538461538, 1: 1}}
+C Best score: 0.8315112540192926 using {'verbosity': 0, 'subsample': 0.7, 'reg_alpha': 100, 'min_child_weight': 1, 'max_depth': 3, 'label_encoder': False, 'gamma': 0.1, 'class_weight': {0: 4.538461538461538, 1: 1}}
+C Best score: 0.8209003215434084 using {'verbosity': 0, 'subsample': 0.8, 'reg_alpha': 1, 'min_child_weight': 1, 'max_depth': 3, 'label_encoder': False, 'gamma': 0.4, 'class_weight': {0: 4.538461538461538, 1: 1}}
+C Best score: 0.8282958199356912 using {'verbosity': 0, 'subsample': 0.6, 'reg_alpha': 100, 'min_child_weight': 3, 'max_depth': 7, 'label_encoder': False, 'gamma': 0.1, 'class_weight': {0: 4.538461538461538, 1: 1}}
+C Best score: 0.8205787781350484 using {'verbosity': 0, 'subsample': 0.7, 'reg_alpha': 1, 'min_child_weight': 1, 'max_depth': 4, 'label_encoder': False, 'gamma': 0.0, 'class_weight': {0: 4.538461538461538, 1: 1}}
+C*Best score: 0.8315112540192926 using {'verbosity': 0, 'subsample': 0.7, 'reg_alpha': 100, 'min_child_weight': 3, 'max_depth': 5, 'label_encoder': False, 'gamma': 0.3, 'class_weight': {0: 4.538461538461538, 1: 1}} 100x
+C*Best score: 0.8315112540192926 using {'verbosity': 0, 'subsample': 0.7, 'reg_alpha': 100, 'min_child_weight': 2, 'max_depth': 6, 'label_encoder': False, 'gamma': 0.0, 'class_weight': {0: 4.538461538461538, 1: 1}} 100x
+C*Best score: 0.8315112540192926 using {'verbosity': 0, 'subsample': 0.7, 'reg_alpha': 100, 'min_child_weight': 0, 'max_depth': 4, 'label_encoder': False, 'gamma': 0.1, 'class_weight': {0: 4.538461538461538, 1: 1}} 200x
+C*Best score: 0.8315112540192926 using {'verbosity': 0, 'subsample': 0.7, 'reg_alpha': 100, 'min_child_weight': 1, 'max_depth': 9, 'label_encoder': False, 'gamma': 0.3, 'class_weight': {0: 4.538461538461538, 1: 1}} 300x
+C*Best score: 0.8315112540192926 using {'verbosity': 0, 'subsample': 0.7, 'reg_alpha': 100, 'min_child_weight': 2, 'max_depth': 7, 'label_encoder': False, 'gamma': 0.3, 'class_weight': {0: 4.538461538461538, 1: 1}} 500x
+C*Best score: 0.8315112540192926 using {'verbosity': 0, 'subsample': 0.7, 'reg_alpha': 100, 'min_child_weight': 2, 'max_depth': 7, 'label_encoder': False, 'gamma': 0.1, 'class_weight': {0: 4.538461538461538, 1: 1}} 1000x
+
+grid:
+takes too long (1hr plus on colab)
+
+
